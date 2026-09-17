@@ -31,6 +31,10 @@ See **[docs/RESULTS.md](docs/RESULTS.md)** for the complete held-out numbers,
 generated directly from `artifacts/results/` — no figure in that document is
 typed by hand.
 
+A presentation deck built from the same run is at
+[docs/deck.html](docs/deck.html) — open it in a browser; arrow keys move between
+slides.
+
 Headline, on held-out lots:
 
 <!-- RESULTS_SUMMARY_START -->

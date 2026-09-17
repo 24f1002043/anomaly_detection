@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SIH26170 Burn-In Screening</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* Minimal reset. The hosted Artifact build gets this from its own skeleton;
+     this standalone copy carries it so the file opens identically from a clone. */
+  html { color-scheme: light dark; }
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<style>
+  :root {
+    --ground: #f6f8fa;
+    --surface: #ffffff;
+    --surface-2: #eef2f6;
+    --ink: #131920;
+    --muted: #5a6675;
+    --faint: #8996a6;
+    --rule: #d7dee6;
+    --rule-strong: #b9c4d0;
+    --accent: #0e7490;
+    --accent-soft: #e0f2f7;
+    --pass: #15803d;
+    --watch: #b45309;
+    --reject: #b42318;
+    --pass-bg: #e8f5ec;
+    --watch-bg: #fdf1e3;
+    --reject-bg: #fceceb;
+
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --cond: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+    --rail: 84px;
+    --maxw: 1080px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0d1218;
+      --surface: #151b23;
+      --surface-2: #1c242e;
+      --ink: #e7edf4;
+      --muted: #8fa0b2;
+      --faint: #6b7a8c;
+      --rule: #26303b;
+      --rule-strong: #35424f;
+      --accent: #2aa5c0;
+      --accent-soft: #10303a;
+      --pass: #4ade80;
+      --watch: #f5b544;
+      --reject: #f87171;
+      --pass-bg: #10291b;
+      --watch-bg: #2e2110;
+      --reject-bg: #2e1618;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0d1218;
+    --surface: #151b23;
+    --surface-2: #1c242e;
+    --ink: #e7edf4;
+    --muted: #8fa0b2;
+    --faint: #6b7a8c;
+    --rule: #26303b;
+    --rule-strong: #35424f;
+    --accent: #2aa5c0;
+    --accent-soft: #10303a;
+    --pass: #4ade80;
+    --watch: #f5b544;
+    --reject: #f87171;
+    --pass-bg: #10291b;
+    --watch-bg: #2e2110;
+    --reject-bg: #2e1618;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------------------------------------------------------- slide rail */
+  .rail {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: var(--rail);
+    padding-top: calc(28px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    border-right: 1px solid var(--rule);
+    background: var(--surface);
+    z-index: 30;
+  }
+  .rail-mark {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    color: var(--faint);
+    writing-mode: vertical-rl;
+    margin-bottom: 14px;
+  }
+  .rail a {
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 30px;
+    font-family: var(--mono); font-size: 11.5px; font-weight: 500;
+    color: var(--faint); text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  .rail a:hover { color: var(--ink); }
+  .rail a.on { color: var(--accent); border-left-color: var(--accent); }
+  .rail-keys {
+    margin-top: auto;
+    font-family: var(--mono); font-size: 9.5px; line-height: 1.5;
+    color: var(--faint); text-align: center;
+  }
+
+  /* -------------------------------------------------------------- shell */
+  .shell { margin-left: var(--rail); }
+  .slide {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding-inline: 32px;
+    padding-block: 72px;
+    border-bottom: 1px solid var(--rule);
+    scroll-margin-top: 0;
+  }
+  .slide:last-child { border-bottom: 0; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: .13em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  }
+  .eyebrow .n { color: var(--faint); }
+
+  h1 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: clamp(34px, 6vw, 60px);
+    line-height: 1.04;
+    letter-spacing: -.015em;
+    margin: 0 0 18px;
+    text-wrap: balance;
+  }
+  h2 {
+    font-family: var(--cond);
+    font-weight: 600;
+    font-size: clamp(25px, 3.6vw, 38px);
+    line-height: 1.12;
+    letter-spacing: -.01em;
+    margin: 0 0 16px;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--cond);
+    font-weight: 600;
+    font-size: 18px;
+    margin: 30px 0 10px;
+    letter-spacing: .005em;
+  }
+  p { margin: 0 0 14px; max-width: 68ch; }
+  .lede { font-size: 17px; color: var(--muted); max-width: 64ch; }
+  strong { font-weight: 600; }
+  .m { font-family: var(--mono); font-size: .92em; }
+  .u { color: var(--muted); font-weight: 400; }
+
+  /* --------------------------------------------------------------- title */
+  .hero-meta {
+    font-family: var(--mono); font-size: 12px;
+    letter-spacing: .06em; color: var(--muted);
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    margin-bottom: 26px;
+  }
+  .chip {
+    border: 1px solid var(--rule-strong);
+    padding: 3px 9px; border-radius: 3px;
+    white-space: nowrap;
+  }
+  .chip.solid { background: var(--accent); border-color: var(--accent); color: #fff; }
+  :root[data-theme="dark"] .chip.solid,
+  :root:not([data-theme="light"]) .chip.solid { color: #08171c; }
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .chip.solid { color: #fff; } }
+
+  /* --------------------------------------------------------- headline row */
+  .headline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 26px 0 8px;
+  }
+  .hcell { background: var(--surface); padding: 18px 18px 16px; }
+  .hcell .k {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 8px;
+  }
+  .hcell .v {
+    font-family: var(--cond); font-weight: 700;
+    font-size: 30px; line-height: 1; letter-spacing: -.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .hcell .s { font-size: 12.5px; color: var(--muted); margin-top: 7px; line-height: 1.45; }
+  .hcell.hi .v { color: var(--accent); }
+
+  /* --------------------------------------------------------------- flow */
+  .flow {
+    font-family: var(--mono); font-size: 12.5px;
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px; margin: 18px 0;
+    overflow-x: auto; white-space: nowrap;
+    color: var(--muted);
+  }
+  pre.code {
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.65;
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    padding: 14px 16px; margin: 16px 0;
+    overflow-x: auto;
+    color: var(--ink);
+  }
+  pre.code .cm { color: var(--faint); }
+
+  /* -------------------------------------------------------------- table */
+  .tw { overflow-x: auto; margin: 18px 0; border: 1px solid var(--rule); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; background: var(--surface); }
+  th {
+    font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+    letter-spacing: .09em; text-transform: uppercase;
+    color: var(--faint); text-align: left;
+    padding: 11px 14px; border-bottom: 1px solid var(--rule-strong);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 14px; border-bottom: 1px solid var(--rule);
+    font-variant-numeric: tabular-nums;
+  }
+  tr:last-child td { border-bottom: 0; }
+  td.num, th.num { text-align: right; font-family: var(--mono); font-size: 12.5px; }
+  td.lab { font-weight: 500; }
+  tr.best td { background: var(--accent-soft); }
+  tr.best td.lab { font-weight: 600; }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+    letter-spacing: .06em;
+    padding: 2px 7px; border-radius: 3px; white-space: nowrap;
+  }
+  .tag.pass { background: var(--pass-bg); color: var(--pass); }
+  .tag.watch { background: var(--watch-bg); color: var(--watch); }
+  .tag.reject { background: var(--reject-bg); color: var(--reject); }
+
+  /* -------------------------------------------------------------- figure */
+  figure { margin: 22px 0 8px; }
+  figure img {
+    width: 100%; max-width: 100%; display: block;
+    border: 1px solid var(--rule);
+    background: #fff;
+  }
+  figcaption {
+    font-size: 12.5px; color: var(--muted);
+    margin-top: 9px; max-width: 72ch;
+  }
+
+  /* --------------------------------------------------------------- notes */
+  .note {
+    border-left: 3px solid var(--rule-strong);
+    padding: 2px 0 2px 16px;
+    margin: 18px 0;
+    color: var(--muted);
+    max-width: 66ch;
+  }
+  .note.flag { border-left-color: var(--watch); }
+  .note.flag strong { color: var(--watch); }
+  .note.hard { border-left-color: var(--accent); }
+  .note.hard strong { color: var(--accent); }
+
+  .quote {
+    font-family: var(--cond);
+    font-size: clamp(19px, 2.4vw, 25px);
+    line-height: 1.34;
+    font-weight: 500;
+    border-left: 3px solid var(--accent);
+    padding-left: 20px;
+    margin: 24px 0;
+    max-width: 30ch;
+    text-wrap: balance;
+  }
+
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 26px; margin: 20px 0; }
+  .cols p { max-width: none; }
+
+  ul.clean { margin: 10px 0 14px; padding-left: 0; list-style: none; max-width: 68ch; }
+  ul.clean li {
+    padding-left: 20px; margin-bottom: 9px; position: relative;
+  }
+  ul.clean li::before {
+    content: ""; position: absolute; left: 3px; top: .62em;
+    width: 6px; height: 1px; background: var(--rule-strong);
+  }
+  ul.clean li.no::before { background: var(--reject); height: 2px; top: .58em; }
+
+  .kv { font-family: var(--mono); font-size: 12.5px; }
+
+  footer {
+    margin-left: var(--rail);
+    padding: 34px 32px calc(44px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--rule);
+    color: var(--muted); font-size: 13px;
+  }
+  footer .inner { max-width: var(--maxw); margin: 0 auto; }
+  a { color: var(--accent); }
+
+  @media (max-width: 760px) {
+    :root { --rail: 0px; }
+    .rail { display: none; }
+    .shell, footer { margin-left: 0; }
+    .slide { padding-inline: 20px; padding-block: 52px; }
+    footer { padding-inline: 20px; }
+    .quote { max-width: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { scroll-behavior: auto !important; transition: none !important; }
+  }
+  html { scroll-behavior: smooth; }
+</style>
+
+</head>
+<body>
+<nav class="rail" aria-label="Slides">
+  <div class="rail-mark">SIH26170</div>
+  <a href="#s0" data-n="0" class="on">00</a>
+  <a href="#s1" data-n="1">01</a>
+  <a href="#s2" data-n="2">02</a>
+  <a href="#s3" data-n="3">03</a>
+  <a href="#s4" data-n="4">04</a>
+  <a href="#s5" data-n="5">05</a>
+  <a href="#s6" data-n="6">06</a>
+  <a href="#s7" data-n="7">07</a>
+  <a href="#s8" data-n="8">08</a>
+  <a href="#s9" data-n="9">09</a>
+  <div class="rail-keys">&uarr;&darr;<br>keys</div>
+</nav>
+
+<main class="shell">
+
+  <!-- ============================================================ 00 -->
+  <section class="slide" id="s0">
+    <div class="hero-meta">
+      <span class="chip solid">SIH26170</span>
+      <span class="chip">ISRO / Dept. of Space</span>
+      <span class="chip">Software</span>
+      <span class="chip">Smart Automation</span>
+    </div>
+    <h1>AI-Driven Anomaly Detection in Component Burn-In &amp; Screening</h1>
+    <p class="lede">
+      High-reliability parts are soaked at 125&nbsp;°C for 168&nbsp;hours. Today's screen
+      applies a static pass/fail limit at each checkpoint. Latent defects survive it:
+      parts that stay inside the absolute limit for the whole soak while drifting in
+      a way a healthy part does not. Those parts reach the payload.
+    </p>
+
+    <div class="headline">
+      <div class="hcell hi">
+        <div class="k">Escape rate</div>
+        <div class="v">67.1 &rarr; 2.0<span class="u" style="font-size:18px">&thinsp;%</span></div>
+        <div class="s">static screen &rarr; full system, on held-out lots</div>
+      </div>
+      <div class="hcell">
+        <div class="k">Yield loss</div>
+        <div class="v">3.81<span class="u" style="font-size:18px">&thinsp;%</span></div>
+        <div class="s">what that escape rate costs, reported not minimised</div>
+      </div>
+      <div class="hcell">
+        <div class="k">Chamber-hours freed</div>
+        <div class="v">70,560</div>
+        <div class="s">490 parts rejected at 24&nbsp;h &times; 144&nbsp;h saved each</div>
+      </div>
+      <div class="hcell">
+        <div class="k">Explanation coverage</div>
+        <div class="v">100<span class="u" style="font-size:18px">&thinsp;%</span></div>
+        <div class="s">every flag; quoted arithmetic reproduces by hand</div>
+      </div>
+    </div>
+    <p class="kv" style="color:var(--faint);margin-top:14px">
+      100,000 components &middot; 400 lots &middot; 120 test lots held out at lot level &middot; seed 26170 &middot; CPU only
+    </p>
+  </section>
+
+  <!-- ============================================================ 01 -->
+  <section class="slide" id="s1">
+    <div class="eyebrow"><span class="n">01</span><span>The problem</span></div>
+    <h2>The limit is not set wrong. It is the wrong instrument.</h2>
+
+    <div class="cols">
+      <div>
+        <p>
+          A datasheet maximum answers <em>is this reading legal?</em> It cannot answer
+          <em>is this part behaving unlike its own lot?</em> On our held-out run,
+          <strong>67.1&nbsp;% of defective parts finish the soak below every datasheet
+          maximum</strong> — no static threshold, however tuned, can catch them.
+        </p>
+        <p>
+          The physics is why burn-in works at all. Under an Arrhenius acceleration
+          factor, a latent defect degrades roughly <strong>thirty times faster</strong>
+          under stress while looking unremarkable at ambient:
+        </p>
+        <pre class="code">AF = exp[ (Ea / k) &times; (1/T_use &minus; 1/T_stress) ]
+
+Ea = 0.35 eV  healthy mechanism  &rarr; AF =  31
+Ea = 0.70 eV  latent defect      &rarr; AF = 938   <span class="cm">(9.4e2)</span>
+
+V(t) = V&#8320; &times; [ 1 + &beta;&#8339; &middot; AF &middot; (t/168)^n ]
+n = 0.5 healthy   <span class="cm">sub-linear, saturating wear-in</span>
+n = 1.2 defective <span class="cm">super-linear, accelerating runaway</span></pre>
+      </div>
+      <div>
+        <div class="quote">The signal is in the movement, not the level.</div>
+        <p>
+          The design is <strong>additive</strong>. Existing engineering limits stay in
+          the loop and keep rejecting hard failures. The machine-learning layer runs on
+          the population that <em>survives</em> the static checks.
+        </p>
+        <div class="flow">4 checkpoints &nbsp;0 / 24 / 96 / 168&nbsp;h &rarr; two modules &rarr; PASS &middot; WATCH &middot; REJECT</div>
+      </div>
+    </div>
+
+    <figure>
+      <img src="../artifacts/figures/01_trajectories_by_population.png" alt="Median trajectories for four part populations across the four burn-in checkpoints, for standby current, leakage current and propagation delay. Latent defects rise steeply but mostly stay below the datasheet limit line.">
+      <figcaption>
+        Latent defects (red) climb steeply yet finish under the limit. Benign
+        high-baseline parts (blue) sit high and flat — a trap for any rule that flags
+        on level. Low-start fast-drift defects (orange) begin <em>below</em> the healthy
+        median and only separate late. The shaded band is all Module B ever sees.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ============================================================ 02 -->
+  <section class="slide" id="s2">
+    <div class="eyebrow"><span class="n">02</span><span>The data, and the gate it had to pass</span></div>
+    <h2>We made the data hard on purpose, and the gate is in the code.</h2>
+
+    <p>
+      No public dataset has parametric burn-in telemetry with hidden 168&nbsp;h terminal
+      values and defect labels. NASA SMAP/MSL, NASA IMS and CWRU were reviewed and set
+      aside — we downloaded the SMAP/MSL label index and checked it against its own
+      schema rather than describing it from memory. It has 82 channel segments and 105
+      labelled anomaly sequences, but no part, lot or wafer identity and no terminal
+      parametric value, so neither module can be scored on it.
+    </p>
+    <p>
+      So the data is generated — which means <strong>the generator is the thing under
+      scrutiny, not the model</strong>. A generator that makes defects obvious proves
+      nothing, because a model can only find what was deliberately embedded. We
+      therefore gate it <em>before any model is fitted</em>:
+    </p>
+
+    <div class="quote">
+      The generator is accepted only if the best static-limit baseline catches a clear
+      minority of the defective population.
+    </div>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>Acceptance check</th><th class="num">Measured</th><th class="num">Required</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">Static-limit recall on defects</td><td class="num">32.87 %</td><td class="num">&lt; 50 %</td><td><span class="tag pass">PASS</span></td></tr>
+          <tr><td class="lab">Defects finishing under the datasheet maximum</td><td class="num">67.13 %</td><td class="num">&ge; 60 %</td><td><span class="tag pass">PASS</span></td></tr>
+          <tr><td class="lab">Static-limit yield loss on healthy parts</td><td class="num">0.002 %</td><td class="num">&gt; 0</td><td><span class="tag pass">PASS</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="kv" style="color:var(--faint)">
+      scripts/01_generate_data.py exits non-zero if this fails &middot; tests/test_generator.py asserts it
+    </p>
+
+    <h3>Four populations injected to defeat trivial solutions</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Population</th><th>What it punishes</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">Latent defects under the limit</td><td>The escapes the problem statement is about. Unreachable by any static threshold.</td></tr>
+          <tr><td class="lab">Benign high-baseline healthy parts</td><td>High V&#8320;, flat profile, 3–5&sigma; above their own lot. Punishes level-based rules.</td></tr>
+          <tr><td class="lab">Low-start fast-drift defects</td><td>Unremarkable at 0&nbsp;h, mildly elevated at 24&nbsp;h. Sets the real ceiling on early rejection.</td></tr>
+          <tr><td class="lab">Contaminated lots</td><td>15–20 % defective inside one lot, corrupting that lot's own median and MAD.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Plus a chamber common-mode offset shared across each chamber load, which cancels
+      under lot-relative statistics and survives naive absolute-drift rules.
+    </p>
+  </section>
+
+  <!-- ============================================================ 03 -->
+  <section class="slide" id="s3">
+    <div class="eyebrow"><span class="n">03</span><span>Module A &mdash; terminal path at 168 h</span></div>
+    <h2>The lot is the right reference frame.</h2>
+
+    <div class="flow">4 checkpoints &rarr; interval-rate + lot-relative features &rarr; robust z-rule &#8746; Isolation Forest &rarr; severity</div>
+
+    <div class="cols">
+      <div>
+        <p>
+          The canonical case from the problem statement: <em>in a lot averaging 10&nbsp;µA,
+          a part reading 45&nbsp;µA is a severe anomaly even though the datasheet maximum
+          is 50&nbsp;µA.</em> One line of arithmetic implements it, and a QA inspector can
+          check it by hand:
+        </p>
+        <pre class="code">robust_z(V&#8348;) = ( V&#8348; &minus; median_lot(V&#8348;) )
+          &divide; ( 1.4826 &times; MAD_lot(V&#8348;) )</pre>
+        <p>
+          Two detectors run in parallel and combine under a <strong>maximum-severity
+          union, not an intersection</strong> — under a 20:1 cost where a miss is
+          catastrophic, requiring both detectors to agree is the wrong operator. Each
+          parameter produces its own severity; the component takes the worst, and the
+          flag records which parameter drove it. A component is never averaged into a pass.
+        </p>
+      </div>
+      <div>
+        <h3 style="margin-top:0">Calibrated, not assumed</h3>
+        <p>
+          Section 4.2 calls for a <em>calibrated</em> critical value. Swept against the
+          20:1 cost on validation lots, it lands at <span class="m"><strong>z = 8</strong></span>.
+        </p>
+        <p>
+          A textbook 3.5&thinsp;&sigma; would have cost a <strong>10.1&nbsp;% false-reject
+          rate</strong> — the WATCH state fires on a single-parameter exceedance, so an
+          uncalibrated value floods the inspector queue with healthy parts.
+        </p>
+        <div class="note hard">
+          <strong>Excluded on purpose:</strong> RMS, kurtosis, crest factor,
+          rolling-window statistics, polynomial curvature fits, persistence rules. With
+          four unevenly spaced samples per part these are undefined or noise-dominated.
+          Carrying them in is a sign the feature set was copied from a different sensing
+          problem.
+        </div>
+      </div>
+    </div>
+
+    <figure>
+      <img src="../artifacts/figures/02_lot_relative_separation.png" alt="Left: standby current at 168 hours plotted per lot, showing lot means differ so one global threshold is the wrong instrument. Right: histogram of robust z of total drift within lot, where healthy and defective parts separate cleanly.">
+      <figcaption>
+        Left: absolute value — lot means differ, so a single global threshold is the
+        wrong instrument. Right: the same parts, once the lot is the reference.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ============================================================ 04 -->
+  <section class="slide" id="s4">
+    <div class="eyebrow"><span class="n">04</span><span>Module B &mdash; early path at 24 h</span></div>
+    <h2>Decide at 24 hours, free 144 hours of chamber time.</h2>
+
+    <div class="flow">Value_0h + Value_24h &rarr; Random Forest &rarr; predicted Value_168h + interval &rarr; safety-slope decision</div>
+
+    <p>
+      Inputs are restricted to the 0&nbsp;h and 24&nbsp;h checkpoints by an
+      <strong>allowlist enforced in code</strong>, not by convention. The test that
+      proves it overwrites the 96&nbsp;h and 168&nbsp;h columns with nonsense and asserts
+      every feature value and every prediction is bit-identical. If a judge suspects
+      leakage, run it in front of them.
+    </p>
+
+    <div class="tw">
+      <table>
+        <thead>
+          <tr><th>Predictor</th><th class="num">MAE iddq (µA)</th><th class="num">MAE leak (µA)</th><th class="num">MAE tpd (ns)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="lab">Last value</td><td class="num">1.5302</td><td class="num">0.2589</td><td class="num">0.2407</td></tr>
+          <tr><td class="lab">Linear extrapolation</td><td class="num">2.6252</td><td class="num">0.4351</td><td class="num">0.8335</td></tr>
+          <tr><td class="lab">Lot median trajectory</td><td class="num">1.5621</td><td class="num">0.2695</td><td class="num">0.2544</td></tr>
+          <tr class="best"><td class="lab">Random Forest</td><td class="num">0.6306</td><td class="num">0.1099</td><td class="num">0.1377</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="kv" style="color:var(--faint)">
+      1.7–2.4&times; better than the best baseline on every parameter &middot;
+      grouped CV over lot_id &middot; units never pooled
+    </p>
+
+    <h3>Uncertainty is itself a reason to reject</h3>
+    <p>
+      A point prediction ignores its own uncertainty, which is exactly wrong when a miss
+      is catastrophic. The rule acts on the <strong>upper bound</strong> of a
+      locally-adaptive split-conformal interval calibrated on held-out lots:
+    </p>
+    <pre class="code">S_safe = ( L_max &minus; V&#8320; &minus; M ) / 168      M = max( 0.10&middot;L_max , 3&sigma;_meas )
+S_pred = ( V&#770;&#8321;&#8326;&#8328; &minus; V&#8320; ) / 168
+margin = S_safe &minus; S_pred
+
+EARLY-REJECT if  V&#770;&#8321;&#8326;&#8328;(upper, 90 %) &gt; L_max &minus; M   or   S_pred &gt; S_safe</pre>
+    <div class="note hard">
+      <strong>V&#8320; cancels in the margin.</strong> That leaves the identity
+      <span class="m">margin = (L_max &minus; M &minus; V&#770;&#8321;&#8326;&#8328;) / 168</span> — an inspector can verify any
+      quoted margin with three numbers and a calculator.
+    </div>
+    <p>
+      The interval is locally adaptive, normalised by the spread of the forest's own
+      trees. A constant-width band is calibrated on average and wrong where it matters:
+      it hands an extreme part the same interval as a typical one, so a rule meant to
+      refuse to clear what the model does not understand never widens for the parts it
+      understands least. Measured coverage holds at
+      <span class="m">89.5–89.8&nbsp;%</span> against a nominal 90&nbsp;%, while width spans
+      a ~450&times; range.
+    </p>
+  </section>
+
+  <!-- ============================================================ 05 -->
+  <section class="slide" id="s5">
+    <div class="eyebrow"><span class="n">05</span><span>Ablation ladder</span></div>
+    <h2>Every rung at the same operating point, including the unflattering ones.</h2>
+
+    <div class="tw">
+      <table>
+        <thead>
+          <tr><th>Configuration</th><th class="num">Escape rate</th><th class="num">F&#8322;</th><th class="num">Yield loss</th><th class="num">Cost / 1k</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="lab">Static limit only</td><td class="num">68.27 %</td><td class="num">0.367</td><td class="num">0.01 %</td><td class="num">368.7</td></tr>
+          <tr class="best"><td class="lab">+ lot-relative z-rule</td><td class="num">9.51 %</td><td class="num">0.896</td><td class="num">0.41 %</td><td class="num">55.3</td></tr>
+          <tr><td class="lab">Isolation Forest alone</td><td class="num">10.99 %</td><td class="num">0.909</td><td class="num">0.01 %</td><td class="num">59.5</td></tr>
+          <tr><td class="lab">Combined detector</td><td class="num">11.48 %</td><td class="num">0.892</td><td class="num">0.22 %</td><td class="num">64.1</td></tr>
+          <tr><td class="lab">Combined + Module B early</td><td class="num">12.59 %</td><td class="num">0.849</td><td class="num">0.75 %</td><td class="num">75.3</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cols">
+      <div>
+        <p>
+          The first rung is the whole argument: the static screen escapes most defects,
+          and every dynamic rung takes that to single digits. Beyond it the rungs are
+          close — each is calibrated separately against the same escape target, so they
+          land at similar escape rates by construction and the honest comparison is on
+          <em>what that escape rate costs</em>.
+        </p>
+      </div>
+      <div>
+        <div class="note flag">
+          <strong>A negative result we report rather than bury.</strong>
+          The maximum-severity union does <em>not</em> beat its own best component here.
+          The two detectors largely agree on this generator, so the union inherits the
+          z-rule's false positives without adding recall. We keep it for the
+          asymmetric-cost argument — a union cannot be defeated by a failure mode only
+          one detector sees — but that robustness is an <em>argument</em>, not something
+          this run demonstrates, and we do not claim it as one.
+        </div>
+      </div>
+    </div>
+
+    <p>
+      Module B early rejection likewise does not improve <em>terminal</em> detection: the
+      parts it rejects at 24&nbsp;h are largely parts Module A catches at 168&nbsp;h
+      anyway. Its value is chamber time, and it costs yield. That is precisely why the
+      early and terminal paths are kept separate — collapsing them destroys the value of
+      early rejection.
+    </p>
+
+    <figure>
+      <img src="../artifacts/figures/03_ablation_ladder.png" alt="Left: bar chart of escape rate by ablation rung, dropping from 68.3 percent for static limit only to about 10 percent for every dynamic configuration. Right: yield loss and F2 across the same rungs.">
+      <figcaption>Escape rate by rung, and what the reduction costs in yield.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============================================================ 06 -->
+  <section class="slide" id="s6">
+    <div class="eyebrow"><span class="n">06</span><span>A finding we did not expect</span></div>
+    <h2>The specified lot-contamination trigger does not fire.</h2>
+
+    <p>
+      The approach specifies the fallback as: <em>if a lot's MAD exceeds a stated factor
+      of a historical band, raise a lot integrity alarm.</em> We implemented it, ran it,
+      and it never fired.
+    </p>
+    <p>
+      <strong>MAD has a 50&nbsp;% breakdown point.</strong> A lot that is 15–20&nbsp;%
+      defective inflates its MAD by only 1.1–1.5&times;, while clean lots already reach
+      1.18&times; at their 99th percentile. There is no separating factor. The very
+      robustness that makes MAD the right <em>denominator</em> for a lot-relative z-score
+      makes it blind as a <em>contamination detector</em>. Those are different jobs.
+    </p>
+    <pre class="code">TI = ( Q&#8329;&#8320;(relative drift) &minus; median ) / ( 1.4826 &times; MAD )
+
+clean lots        &asymp; 1.4   <span class="cm">the normal-theory value</span>
+contaminated lots   8 &ndash; 60</pre>
+    <p>
+      Both triggers are implemented, both are reported, and the alarm is their union. On
+      held-out lots the tail-inflation index caught <strong>4 of 4 contaminated lots with
+      0 false alarms</strong>; the specified MAD trigger caught 0. A regression test pins
+      the finding so it cannot quietly disappear.
+    </p>
+
+    <figure>
+      <img src="../artifacts/figures/06_lot_integrity.png" alt="Left panel: contaminated lots buried inside the cloud of clean lots on the MAD inflation axis, far below the 2.5x trigger. Right panel: on a log-scaled tail inflation axis, contaminated lots sit at 8 to 60 while clean lots cluster near 1.4, cleanly separated by the trigger at 4.">
+      <figcaption>
+        Left: contaminated lots are indistinguishable from clean ones under MAD
+        inflation. Right: the tail-inflation index separates them with more than a
+        4&times; margin on both sides.
+      </figcaption>
+    </figure>
+
+    <div class="note hard">
+      <strong>Why this matters in the room:</strong> it shows we <em>ran</em> the
+      specification rather than implementing it on faith, and that we report a negative
+      result about our own design.
+    </div>
+  </section>
+
+  <!-- ============================================================ 07 -->
+  <section class="slide" id="s7">
+    <div class="eyebrow"><span class="n">07</span><span>Explainability &amp; the decision layer</span></div>
+    <h2>Explainability is a scored criterion, so we scored it.</h2>
+
+    <div class="cols">
+      <div>
+        <p>Every flag carries a complete record, generated automatically, no free text:</p>
+        <ul class="clean">
+          <li>the responsible parameter,</li>
+          <li>the lot-relative arithmetic, reproducible on a calculator,</li>
+          <li>TreeSHAP contributions to the Module B prediction,</li>
+          <li>ranked robust deviations for Module A, in median/MAD units,</li>
+          <li>the raw four-point trajectory against the lot band,</li>
+          <li>the predicted Value_168h, its interval, and the signed margin.</li>
+        </ul>
+        <p class="kv" style="color:var(--faint)">
+          400 flags audited &middot; 400 complete &middot; 100 % of quoted z-scores reproduce by hand
+        </p>
+      </div>
+      <div>
+        <h3 style="margin-top:0">Three dispositions, and how WATCH is scored</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>State</th><th class="num">n</th><th class="num">Defective</th><th class="num">Healthy</th></tr></thead>
+            <tbody>
+              <tr><td class="lab"><span class="tag pass">PASS</span></td><td class="num">28,094</td><td class="num">16</td><td class="num">28,078</td></tr>
+              <tr><td class="lab"><span class="tag watch">WATCH</span></td><td class="num">1,239</td><td class="num">304</td><td class="num">935</td></tr>
+              <tr><td class="lab"><span class="tag reject">REJECT</span></td><td class="num">667</td><td class="num">490</td><td class="num">177</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong>WATCH counts as flagged, never as pass.</strong> An intermediate state
+          that quietly absorbed defective parts would manufacture false negatives — the
+          exact error a 20:1 cost punishes hardest. It costs yield, and we report it.
+        </p>
+      </div>
+    </div>
+
+    <figure>
+      <img src="../artifacts/figures/07_example_flag.png" alt="A single flagged component: its four-point trajectory against the lot band with the Module B prediction and interval marked at 168 hours, the TreeSHAP contributions that drove the prediction, and the full text record including lot arithmetic and margin to the safety slope.">
+      <figcaption>
+        One flagged part, end to end — the trajectory against its lot band, the
+        contributions behind the prediction, and the record an inspector signs off.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ============================================================ 08 -->
+  <section class="slide" id="s8">
+    <div class="eyebrow"><span class="n">08</span><span>Claims</span></div>
+    <h2>What we claim, and what we refuse to.</h2>
+
+    <div class="cols">
+      <div>
+        <h3 style="margin-top:0">Kept</h3>
+        <ul class="clean">
+          <li>The detector flags trajectory and lot-relative outliers that pass static limits.</li>
+          <li>The predictor uses <span class="m">Value_0h</span> and <span class="m">Value_24h</span> only to forecast <span class="m">Value_168h</span>.</li>
+          <li>The evaluation weights false negatives explicitly and reports the yield loss that buys.</li>
+          <li>Every flag carries a named parameter, checkable lot arithmetic and a numeric margin.</li>
+          <li>Every reported number is reproduced by one command from a fixed seed.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin-top:0">Refused</h3>
+        <ul class="clean">
+          <li class="no">That SMAP, MSL or CWRU data predicts 168&nbsp;h burn-in failure.</li>
+          <li class="no">That CWRU data gives remaining useful life.</li>
+          <li class="no">That these synthetic results establish ISRO field escape rates.</li>
+          <li class="no">That the system is qualified or validated on flight hardware.</li>
+        </ul>
+        <div class="note flag">
+          <strong>Deployment requires recalibration on real rig data with real terminal
+          labels</strong>, and the submission says so in writing.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 09 -->
+  <section class="slide" id="s9">
+    <div class="eyebrow"><span class="n">09</span><span>Demo</span></div>
+    <h2>Three minutes, in this order.</h2>
+
+    <pre class="code"><span class="cm"># 1. the gate the data had to pass            (~2 s)</span>
+python scripts/01_generate_data.py
+
+<span class="cm"># 2. prove Module B cannot see the future     (~30 s)</span>
+pytest tests/test_checkpoint_discipline.py -v
+
+<span class="cm"># 3. the inspector queue</span>
+streamlit run app/inspector.py</pre>
+
+    <p>In the dashboard, in order:</p>
+    <ul class="clean">
+      <li><strong>Lot integrity alarms at the top of the queue</strong> — a whole suspect lot is a bigger finding than a single suspect part.</li>
+      <li>Filter to <span class="m">REJECT</span>, sort by severity, open the top part.</li>
+      <li>On the trajectory, point at the shaded 0–24&nbsp;h window: that is all Module B ever saw; the diamond at 168&nbsp;h is what it predicted.</li>
+      <li>Read the lot arithmetic aloud and check it on a calculator.</li>
+      <li>Show the margin block, and note that V&#8320; cancels.</li>
+    </ul>
+
+    <h3>Questions to expect</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Question</th><th>Answer</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">"Synthetic data, so the results are meaningless."</td><td>The generator is gated: static limits catch only 32.9 % of defects, so the models solve a problem the incumbent method demonstrably cannot. The gate is a test, not a paragraph.</td></tr>
+          <tr><td class="lab">"How do I know Module B isn't peeking at 96 h?"</td><td>Run the discipline test. It corrupts the late checkpoints and asserts bit-identical predictions. The allowlist fails closed.</td></tr>
+          <tr><td class="lab">"Isolation Forest is a black box."</td><td>Inspectors act on the z-rule, which is arithmetic. The forest contributes severity; the record shows ranked deviations in median/MAD units. We deliberately do not fake an additive SHAP decomposition for an unsupervised score.</td></tr>
+          <tr><td class="lab">"What is your hardest case?"</td><td>Low-start fast-drift defects — depressed at 0 h, mildly elevated at 24 h. We recall 97.2 % of them, and they cap early rejection. We built that population to have an honest answer.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="inner">
+    <p style="max-width:70ch">
+      Python 3.11 &middot; NumPy, pandas, SciPy, scikit-learn, SHAP, PyArrow, Streamlit &middot;
+      tree-based models throughout, CPU-only, no accelerator required on the rig.
+      49 tests. Full run: <span class="m">python scripts/run_all.py</span> (~8 min).
+    </p>
+    <p class="kv" style="color:var(--faint);margin:0">
+      SIH 2026 problem statement SIH26170 &middot; Indian Space Research Organisation,
+      Department of Space &middot; Software &middot; Smart Automation
+    </p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var slides = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+
+  function current() {
+    var best = 0, bestD = Infinity;
+    for (var i = 0; i < slides.length; i++) {
+      if (!slides[i]) continue;
+      var d = Math.abs(slides[i].getBoundingClientRect().top - 12);
+      if (d < bestD) { bestD = d; best = i; }
+    }
+    return best;
+  }
+
+  function mark() {
+    var i = current();
+    links.forEach(function (a, j) { a.classList.toggle('on', j === i); });
+  }
+
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function () { mark(); ticking = false; });
+  }, { passive: true });
+
+  function go(delta) {
+    var i = Math.min(slides.length - 1, Math.max(0, current() + delta));
+    if (slides[i]) slides[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.addEventListener('keydown', function (e) {
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(1); }
+    else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+    else if (e.key === 'Home') { e.preventDefault(); slides[0].scrollIntoView({ behavior: 'smooth' }); }
+    else if (e.key === 'End') { e.preventDefault(); slides[slides.length - 1].scrollIntoView({ behavior: 'smooth' }); }
+    else if (/^[0-9]$/.test(e.key) && slides[Number(e.key)]) {
+      e.preventDefault(); slides[Number(e.key)].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  mark();
+})();
+</script>
+</body>
+</html>

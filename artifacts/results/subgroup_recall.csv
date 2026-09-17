@@ -1,0 +1,5 @@
+population,n,n_defective,recall,false_flag_rate,escape_rate
+healthy,26292,0,,0.0277,
+benign_high_baseline,2898,0,,0.1325,
+defect_standard,558,558,0.9839,,0.0161
+defect_low_start_fast_drift,252,252,0.9722,,0.0278

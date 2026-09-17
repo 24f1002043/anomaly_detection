@@ -1,0 +1,74 @@
+{
+  "parameters": {
+    "iddq": {
+      "oof_metrics": {
+        "parameter": "iddq",
+        "units": "uA",
+        "mae": 0.6081453988533675,
+        "normalised_mae": 0.38828118043311566,
+        "rmse": 3.9043124399362634,
+        "median_ae": 0.27827521378911513,
+        "r2": 0.8912871908377004,
+        "n": 50000
+      },
+      "conformal_q_lo": -3.082491712693593,
+      "conformal_q_hi": 3.217871348763745,
+      "safety_slope": {
+        "datasheet_limit": 50.0,
+        "sigma_meas": 0.2296677818066783,
+        "reliability_margin_M": 5.0,
+        "M_rule": "max(0.10 * L_max, 3 * sigma_meas)",
+        "limit_minus_M": 45.0
+      },
+      "n_features": 23,
+      "elapsed_s": 121.46
+    },
+    "leak": {
+      "oof_metrics": {
+        "parameter": "leak",
+        "units": "uA",
+        "mae": 0.1131437221008037,
+        "normalised_mae": 0.43939309553710165,
+        "rmse": 0.8736488036539803,
+        "median_ae": 0.043091021140836794,
+        "r2": 0.8748265568088398,
+        "n": 50000
+      },
+      "conformal_q_lo": -3.1137096488448046,
+      "conformal_q_hi": 3.243493662751692,
+      "safety_slope": {
+        "datasheet_limit": 20.0,
+        "sigma_meas": 0.03856954757318266,
+        "reliability_margin_M": 2.0,
+        "M_rule": "max(0.10 * L_max, 3 * sigma_meas)",
+        "limit_minus_M": 18.0
+      },
+      "n_features": 23,
+      "elapsed_s": 108.11
+    },
+    "tpd": {
+      "oof_metrics": {
+        "parameter": "tpd",
+        "units": "ns",
+        "mae": 0.13356096629519373,
+        "normalised_mae": 0.26559476270483445,
+        "rmse": 0.3897722063131307,
+        "median_ae": 0.09751201748388416,
+        "r2": 0.8890652940311466,
+        "n": 50000
+      },
+      "conformal_q_lo": -3.4563633305629082,
+      "conformal_q_hi": 3.4311025831849347,
+      "safety_slope": {
+        "datasheet_limit": 12.0,
+        "sigma_meas": 0.08306337859730967,
+        "reliability_margin_M": 1.2000000000000002,
+        "M_rule": "max(0.10 * L_max, 3 * sigma_meas)",
+        "limit_minus_M": 10.8
+      },
+      "n_features": 23,
+      "elapsed_s": 114.52
+    }
+  },
+  "elapsed_s": 344.26
+}

@@ -1,0 +1,4 @@
+configuration,cost_optimal_threshold,escape_rate,recall,f_beta_2,yield_loss,cost_per_1k_parts
+lot_relative_z_rule,0.975098,0.0346,0.9654,0.911,0.0092,27.67
+isolation_forest,0.974121,0.0284,0.9716,0.932,0.0067,21.83
+combined_detector,0.976074,0.0235,0.9765,0.9211,0.009,21.43

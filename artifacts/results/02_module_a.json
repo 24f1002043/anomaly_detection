@@ -1,0 +1,147 @@
+{
+  "n_train": 50000,
+  "n_features_per_parameter": {
+    "iddq": 35,
+    "leak": 35,
+    "tpd": 35
+  },
+  "z_critical_calibration": {
+    "z_critical": 8.0,
+    "grid": [
+      {
+        "z_critical": 2.5,
+        "escape_rate": 0.0,
+        "false_reject_rate": 0.14923163322611938,
+        "cost": 2923.0
+      },
+      {
+        "z_critical": 3.0,
+        "escape_rate": 0.0,
+        "false_reject_rate": 0.11727165977434012,
+        "cost": 2297.0
+      },
+      {
+        "z_critical": 3.5,
+        "escape_rate": 0.002421307506053269,
+        "false_reject_rate": 0.10062796752948384,
+        "cost": 1991.0
+      },
+      {
+        "z_critical": 4.0,
+        "escape_rate": 0.004842615012106538,
+        "false_reject_rate": 0.0874559656915301,
+        "cost": 1753.0
+      },
+      {
+        "z_critical": 4.5,
+        "escape_rate": 0.009685230024213076,
+        "false_reject_rate": 0.07290549854495329,
+        "cost": 1508.0
+      },
+      {
+        "z_critical": 5.0,
+        "escape_rate": 0.009685230024213076,
+        "false_reject_rate": 0.056312860570786744,
+        "cost": 1183.0
+      },
+      {
+        "z_critical": 5.5,
+        "escape_rate": 0.012106537530266344,
+        "false_reject_rate": 0.04028181957420738,
+        "cost": 889.0
+      },
+      {
+        "z_critical": 6.0,
+        "escape_rate": 0.014527845036319613,
+        "false_reject_rate": 0.028233011691427987,
+        "cost": 673.0
+      },
+      {
+        "z_critical": 7.0,
+        "escape_rate": 0.01937046004842615,
+        "false_reject_rate": 0.010210854137948639,
+        "cost": 360.0
+      },
+      {
+        "z_critical": 8.0,
+        "escape_rate": 0.026634382566585957,
+        "false_reject_rate": 0.0031653647827640783,
+        "cost": 282.0
+      },
+      {
+        "z_critical": 10.0,
+        "escape_rate": 0.03631961259079903,
+        "false_reject_rate": 0.0002042170827589728,
+        "cost": 304.0
+      },
+      {
+        "z_critical": 12.0,
+        "escape_rate": 0.053268765133171914,
+        "false_reject_rate": 5.10542706897432e-05,
+        "cost": 441.0
+      },
+      {
+        "z_critical": 15.0,
+        "escape_rate": 0.07990314769975787,
+        "false_reject_rate": 0.0,
+        "cost": 660.0
+      },
+      {
+        "z_critical": 18.0,
+        "escape_rate": 0.1016949152542373,
+        "false_reject_rate": 0.0,
+        "cost": 840.0
+      },
+      {
+        "z_critical": 22.0,
+        "escape_rate": 0.14043583535108958,
+        "false_reject_rate": 0.0,
+        "cost": 1160.0
+      },
+      {
+        "z_critical": 26.0,
+        "escape_rate": 0.17433414043583534,
+        "false_reject_rate": 0.0,
+        "cost": 1440.0
+      },
+      {
+        "z_critical": 32.0,
+        "escape_rate": 0.2106537530266344,
+        "false_reject_rate": 0.0,
+        "cost": 1740.0
+      },
+      {
+        "z_critical": 40.0,
+        "escape_rate": 0.2711864406779661,
+        "false_reject_rate": 0.0,
+        "cost": 2240.0
+      }
+    ]
+  },
+  "isolation_forest_contamination": 0.05,
+  "lot_integrity": {
+    "mad_triggered": [],
+    "tail_triggered": [
+      "LOT-0038",
+      "LOT-0090",
+      "LOT-0223",
+      "LOT-0258",
+      "LOT-0287"
+    ],
+    "alarmed": [
+      "LOT-0038",
+      "LOT-0090",
+      "LOT-0223",
+      "LOT-0258",
+      "LOT-0287"
+    ],
+    "historical_band": {
+      "iddq": 0.028222842602533528,
+      "leak": 0.0356343114023782,
+      "tpd": 0.01382692665251752
+    },
+    "mad_factor": 2.5,
+    "tail_factor": 4.0
+  },
+  "elapsed_s": 15.14
+}

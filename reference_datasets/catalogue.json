@@ -1,0 +1,81 @@
+[
+  {
+    "key": "nasa_smap_msl",
+    "name": "NASA SMAP / MSL",
+    "what_it_is": "Spacecraft telemetry, 82 channels, 105 labelled anomaly sequences of point and contextual type.",
+    "why_not_used": "Anonymised time axis and pre-scaled values. No 168 h terminal target and no component identity, so neither module can be scored on it.",
+    "source": "https://github.com/khundman/telemanom",
+    "licence": "Apache-2.0 (code); NASA telemetry released for research use",
+    "used_for_scoring": false,
+    "metadata": {
+      "ok": true,
+      "bytes": 3956,
+      "path": "reference_datasets\\nasa_smap_msl\\labeled_anomalies.csv",
+      "summary": {
+        "rows": 82,
+        "channels": 81,
+        "spacecraft": [
+          "MSL",
+          "SMAP"
+        ],
+        "anomaly_sequences_total": 105,
+        "anomaly_class_counts": {
+          "contextual": 43,
+          "point": 62
+        },
+        "total_telemetry_values": 517764,
+        "columns": [
+          "chan_id",
+          "spacecraft",
+          "anomaly_sequences",
+          "class",
+          "num_values"
+        ],
+        "confirms_exclusion": {
+          "has_component_identity": false,
+          "has_168h_terminal_target": false,
+          "values_pre_scaled": true,
+          "note": "Rows are per-channel telemetry segments. There is no part, lot or wafer identity and no terminal parametric value, so neither the Module A lot-relative statistics nor the Module B 0 h + 24 h -> 168 h target can be constructed from it."
+        }
+      }
+    },
+    "bulk": {
+      "skipped": true,
+      "reason": "not used for scoring; pass --full"
+    }
+  },
+  {
+    "key": "nasa_ims",
+    "name": "NASA IMS bearing",
+    "what_it_is": "Run-to-failure bearing vibration, roughly 164 h of 10-minute files.",
+    "why_not_used": "Vibration, not parametric electrical data. The degradation shape is instructive but the features do not transfer.",
+    "source": "https://www.nasa.gov/intelligent-systems-division/discovery-and-systems-health/pcoe/pcoe-data-set-repository/",
+    "licence": "NASA open data, attribution requested",
+    "used_for_scoring": false,
+    "metadata": {
+      "ok": false,
+      "error": "no machine-readable index published; landing page only"
+    },
+    "bulk": {
+      "skipped": true,
+      "reason": "requires interactive download from the landing page"
+    }
+  },
+  {
+    "key": "cwru_bearing",
+    "name": "CWRU bearing",
+    "what_it_is": "Seeded bearing faults at steady state across several loads.",
+    "why_not_used": "Classification data, not run-to-failure. Provides no drift trajectory and no remaining-life signal.",
+    "source": "https://engineering.case.edu/bearingdatacenter",
+    "licence": "Case Western Reserve University, free for research use",
+    "used_for_scoring": false,
+    "metadata": {
+      "ok": false,
+      "error": "no machine-readable index published; landing page only"
+    },
+    "bulk": {
+      "skipped": true,
+      "reason": "requires interactive download from the landing page"
+    }
+  }
+]

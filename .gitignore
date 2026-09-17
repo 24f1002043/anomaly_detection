@@ -1,0 +1,30 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Generated data and fitted models. Both are build outputs: `python
+# scripts/run_all.py` regenerates every one of them from the seed in
+# config/default.yaml. The Random Forests are ~300 MB each, well past
+# GitHub's file limit, and binaries do not belong in version control.
+data/*.parquet
+data/*.csv
+artifacts/models/*.joblib
+artifacts/run_all.log
+
+# Large reference-dataset downloads (documented in docs/EXTERNAL_DATASETS.md)
+reference_datasets/*.zip
+reference_datasets/*.npy
+reference_datasets/*.mat
+reference_datasets/raw/
+
+# OS
+Thumbs.db
+.DS_Store

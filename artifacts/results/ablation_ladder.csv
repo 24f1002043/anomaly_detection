@@ -1,0 +1,6 @@
+configuration,description,operating_point,escape_rate,recall,f_beta_2,pr_auc,precision,yield_loss,cost,cost_per_1k_parts,tp,fp,fn,tn,calibration_feasible
+static_limit_only,Absolute datasheet pass/fail limits at every checkpoint,0.5,0.6827,0.3173,0.3672,0.3333,0.9923,0.0001,11062.0,368.73,257,2,553,29188,True
+lot_relative_z_rule,"R1 alone: lot-relative robust z at any checkpoint, or z of total drift",0.978516,0.0951,0.9049,0.8957,0.9513,0.8603,0.0041,1659.0,55.3,733,119,77,29071,True
+isolation_forest,R2 alone: Isolation Forest over the full Section 4.1 feature vector,0.97998,0.1099,0.8901,0.9092,0.9844,0.9945,0.0001,1784.0,59.47,721,4,89,29186,True
+combined_detector,"R1 and R2 under a maximum-severity union, cost-calibrated threshold",0.980957,0.1148,0.8852,0.8918,0.9712,0.9192,0.0022,1923.0,64.1,717,63,93,29127,True
+combined_plus_module_b_early,Combined detector plus Module B early rejection at 24 h,0.981445,0.1259,0.8741,0.8493,n/a (decision rule),0.7629,0.0075,2260.0,75.33,708,220,102,28970,True

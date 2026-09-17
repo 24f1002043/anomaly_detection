@@ -1,0 +1,66 @@
+{
+  "seed": 26170,
+  "n_components": 100000,
+  "n_lots": 400,
+  "components_per_lot": 250,
+  "af_healthy_nominal": 30.61864998441038,
+  "af_defect_nominal": 937.5017268678337,
+  "prevalence_realised": 0.02461,
+  "contaminated_lots": [
+    "LOT-0038",
+    "LOT-0059",
+    "LOT-0090",
+    "LOT-0162",
+    "LOT-0223",
+    "LOT-0252",
+    "LOT-0258",
+    "LOT-0286",
+    "LOT-0287",
+    "LOT-0311"
+  ],
+  "n_low_start_defects": 749,
+  "n_benign_high_baseline": 9640,
+  "checkpoints": [
+    0,
+    24,
+    96,
+    168
+  ],
+  "acceptance": {
+    "n_components": 100000,
+    "n_defective": 2461,
+    "prevalence": 0.02461,
+    "static_limit_recall": 0.32872815928484356,
+    "static_limit_escape_rate": 0.6712718407151564,
+    "static_limit_false_reject_rate": 2.050461866535437e-05,
+    "defects_under_limit_at_168h": 0.6712718407151564,
+    "defects_under_limit_per_param": {
+      "iddq": 0.6810239739943112,
+      "leak": 0.9020723283218204,
+      "tpd": 0.822429906542056
+    },
+    "accepted_minority_rule": true,
+    "accepted_latent_target": true
+  },
+  "split": {
+    "test": {
+      "lots": 120,
+      "components": 30000,
+      "defective": 810,
+      "prevalence": 0.027
+    },
+    "train": {
+      "lots": 200,
+      "components": 50000,
+      "defective": 1238,
+      "prevalence": 0.02476
+    },
+    "valid": {
+      "lots": 80,
+      "components": 20000,
+      "defective": 413,
+      "prevalence": 0.02065
+    }
+  },
+  "elapsed_s": 1.25
+}

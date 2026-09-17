@@ -1,0 +1,116 @@
+{
+  "component_id": "C00000005",
+  "lot_id": "LOT-0000",
+  "wafer_id": "LOT-0000-W1",
+  "slot_id": "S06",
+  "disposition": "REJECT",
+  "reason": "module_b_early_rejection_at_24h",
+  "responsible_parameter": "tpd",
+  "severity": 0.9775390625,
+  "lot_arithmetic": {
+    "parameter": "tpd",
+    "units": "ns",
+    "checkpoint_h": 168,
+    "value": 10.537,
+    "lot_median": 9.104,
+    "lot_mad": 0.31450000000000067,
+    "scale": 0.46627770000000096,
+    "robust_z": 3.073275861144547,
+    "datasheet_limit": 12.0,
+    "text": "tpd at 168 h: 10.54 ns against lot median 9.104 ns, lot MAD 0.3145; robust z = (10.54 - 9.104) / (1.4826 x 0.3145) = 3.07. Datasheet limit 12 ns.",
+    "reproduces": true
+  },
+  "module_a_deviations": [
+    {
+      "feature": "xp_z_max",
+      "deviation_mad_units": 6.889
+    },
+    {
+      "feature": "tpd_z_96h",
+      "deviation_mad_units": 4.265
+    },
+    {
+      "feature": "tpd_z_level_max",
+      "deviation_mad_units": 4.265
+    },
+    {
+      "feature": "tpd_z_24h",
+      "deviation_mad_units": 3.953
+    },
+    {
+      "feature": "tpd_z_0h",
+      "deviation_mad_units": 3.306
+    }
+  ],
+  "trajectory": {
+    "hours": [
+      0,
+      24,
+      96,
+      168
+    ],
+    "values": [
+      10.277000000000001,
+      10.38,
+      11.002,
+      10.537
+    ],
+    "lot_median": [
+      8.809000000000001,
+      8.789,
+      9.130500000000001,
+      9.104
+    ],
+    "lot_p10": [
+      8.355,
+      8.330499999999999,
+      8.6529,
+      8.6126
+    ],
+    "lot_p90": [
+      9.4511,
+      9.4723,
+      9.9038,
+      9.8704
+    ],
+    "units": "ns",
+    "datasheet_limit": 12.0
+  },
+  "margin": {
+    "parameter": "tpd",
+    "units": "ns",
+    "predicted_168h": 10.402868307004255,
+    "interval_lower": 9.854830815334724,
+    "interval_upper": 10.946900479988592,
+    "nominal_coverage": 0.9,
+    "datasheet_limit": 12.0,
+    "reliability_margin_M": 1.2000000000000002,
+    "s_safe": 0.0031130952380952308,
+    "s_pred": 0.0007492161131205575,
+    "margin_to_safety_slope": 0.002363879124974673,
+    "margin_to_safety_slope_upper": -0.0008744076189797171,
+    "early_reject": true,
+    "early_reject_reason": "upper_bound_exceeds_limit_minus_M"
+  },
+  "shap_contributions": [
+    {
+      "feature": "tpd_v24h",
+      "value": 10.38,
+      "shap": 1.0950674498634894,
+      "direction": "raises"
+    },
+    {
+      "feature": "tpd_headroom",
+      "value": 0.13499999999999993,
+      "shap": 1.0357212295002622,
+      "direction": "raises"
+    },
+    {
+      "feature": "tpd_v0h",
+      "value": 10.277000000000001,
+      "shap": 0.4556579848266279,
+      "direction": "raises"
+    }
+  ],
+  "lot_integrity_alarm": false
+}

@@ -1,0 +1,411 @@
+{
+  "operating_point": {
+    "value": 0.98095703125,
+    "feasible": true,
+    "target": 0.1,
+    "thresholds": {
+      "alert": 0.98095703125,
+      "reject": 0.99609375
+    }
+  },
+  "final_system": {
+    "threshold": NaN,
+    "tp": 794,
+    "fp": 1112,
+    "fn": 16,
+    "tn": 28078,
+    "escape_rate": 0.019753086419753086,
+    "recall": 0.980246913580247,
+    "precision": 0.41657922350472193,
+    "f_beta": 0.7714729887291101,
+    "false_reject_rate": 0.0380952380952381,
+    "cost": 1432.0,
+    "cost_per_1k": 47.733333333333334,
+    "pr_auc": 0.9712,
+    "n": 30000,
+    "n_positive": 810,
+    "prevalence": 0.027
+  },
+  "early_rejection": {
+    "early_reject_rate": 0.022233333333333334,
+    "early_recall": 0.6049382716049383,
+    "early_escape_rate": 0.3950617283950617,
+    "early_precision": 0.7346326836581709,
+    "early_false_reject_rate": 0.006063720452209661,
+    "n_correctly_early_rejected": 490,
+    "n_wrongly_early_rejected": 177,
+    "chamber_hours_saved": 70560.0,
+    "chamber_hours_lost_to_false_rejects": 25488.0,
+    "net_chamber_hours_saved": 96048.0,
+    "tp": 490,
+    "fp": 177,
+    "fn": 320,
+    "tn": 29013
+  },
+  "dispositions": {
+    "PASS": {
+      "n": 28094,
+      "share": 0.9364666666666667,
+      "defective": 16,
+      "healthy": 28078
+    },
+    "WATCH": {
+      "n": 1239,
+      "share": 0.0413,
+      "defective": 304,
+      "healthy": 935
+    },
+    "REJECT": {
+      "n": 667,
+      "share": 0.022233333333333334,
+      "defective": 490,
+      "healthy": 177
+    },
+    "flagged_is_positive": true
+  },
+  "ablation_ladder": [
+    {
+      "configuration": "static_limit_only",
+      "description": "Absolute datasheet pass/fail limits at every checkpoint",
+      "operating_point": 0.5,
+      "escape_rate": 0.6827,
+      "recall": 0.3173,
+      "f_beta_2": 0.3672,
+      "pr_auc": 0.3333,
+      "precision": 0.9923,
+      "yield_loss": 0.0001,
+      "cost": 11062.0,
+      "cost_per_1k_parts": 368.73,
+      "tp": 257,
+      "fp": 2,
+      "fn": 553,
+      "tn": 29188,
+      "calibration_feasible": true
+    },
+    {
+      "configuration": "lot_relative_z_rule",
+      "description": "R1 alone: lot-relative robust z at any checkpoint, or z of total drift",
+      "operating_point": 0.978516,
+      "escape_rate": 0.0951,
+      "recall": 0.9049,
+      "f_beta_2": 0.8957,
+      "pr_auc": 0.9513,
+      "precision": 0.8603,
+      "yield_loss": 0.0041,
+      "cost": 1659.0,
+      "cost_per_1k_parts": 55.3,
+      "tp": 733,
+      "fp": 119,
+      "fn": 77,
+      "tn": 29071,
+      "calibration_feasible": true
+    },
+    {
+      "configuration": "isolation_forest",
+      "description": "R2 alone: Isolation Forest over the full Section 4.1 feature vector",
+      "operating_point": 0.97998,
+      "escape_rate": 0.1099,
+      "recall": 0.8901,
+      "f_beta_2": 0.9092,
+      "pr_auc": 0.9844,
+      "precision": 0.9945,
+      "yield_loss": 0.0001,
+      "cost": 1784.0,
+      "cost_per_1k_parts": 59.47,
+      "tp": 721,
+      "fp": 4,
+      "fn": 89,
+      "tn": 29186,
+      "calibration_feasible": true
+    },
+    {
+      "configuration": "combined_detector",
+      "description": "R1 and R2 under a maximum-severity union, cost-calibrated threshold",
+      "operating_point": 0.980957,
+      "escape_rate": 0.1148,
+      "recall": 0.8852,
+      "f_beta_2": 0.8918,
+      "pr_auc": 0.9712,
+      "precision": 0.9192,
+      "yield_loss": 0.0022,
+      "cost": 1923.0,
+      "cost_per_1k_parts": 64.1,
+      "tp": 717,
+      "fp": 63,
+      "fn": 93,
+      "tn": 29127,
+      "calibration_feasible": true
+    },
+    {
+      "configuration": "combined_plus_module_b_early",
+      "description": "Combined detector plus Module B early rejection at 24 h",
+      "operating_point": 0.981445,
+      "escape_rate": 0.1259,
+      "recall": 0.8741,
+      "f_beta_2": 0.8493,
+      "pr_auc": "n/a (decision rule)",
+      "precision": 0.7629,
+      "yield_loss": 0.0075,
+      "cost": 2260.0,
+      "cost_per_1k_parts": 75.33,
+      "tp": 708,
+      "fp": 220,
+      "fn": 102,
+      "tn": 28970,
+      "calibration_feasible": true
+    }
+  ],
+  "module_b_accuracy": [
+    {
+      "predictor": "random_forest",
+      "parameter": "iddq",
+      "units": "uA",
+      "mae": 0.6305882563872666,
+      "normalised_mae": 0.39566321969397117,
+      "rmse": 6.94248036839117,
+      "median_ae": 0.2652578977085165,
+      "r2": 0.7567306460869998,
+      "n": 30000,
+      "lot_iqr": 1.59375
+    },
+    {
+      "predictor": "last_value",
+      "parameter": "iddq",
+      "units": "uA",
+      "mae": 1.5301856666666667,
+      "normalised_mae": 0.9601164967320261,
+      "rmse": 12.876769221483057,
+      "median_ae": 0.379999999999999,
+      "r2": 0.1631032031648687,
+      "n": 30000,
+      "lot_iqr": 1.59375
+    },
+    {
+      "predictor": "linear_extrapolation",
+      "parameter": "iddq",
+      "units": "uA",
+      "mae": 2.6252470000000003,
+      "normalised_mae": 1.647213803921569,
+      "rmse": 7.550163771954443,
+      "median_ae": 1.7700000000000102,
+      "r2": 0.7122794875050926,
+      "n": 30000,
+      "lot_iqr": 1.59375
+    },
+    {
+      "predictor": "lot_median_trajectory",
+      "parameter": "iddq",
+      "units": "uA",
+      "mae": 1.5620547008107595,
+      "normalised_mae": 0.9801127534498884,
+      "rmse": 12.823979936813126,
+      "median_ae": 0.39724947136380795,
+      "r2": 0.16995098066954928,
+      "n": 30000,
+      "lot_iqr": 1.59375
+    },
+    {
+      "predictor": "random_forest",
+      "parameter": "leak",
+      "units": "uA",
+      "mae": 0.10992657737013661,
+      "normalised_mae": 0.4268993295927636,
+      "rmse": 1.1840291689453277,
+      "median_ae": 0.04200808759050989,
+      "r2": 0.7932229001577733,
+      "n": 30000,
+      "lot_iqr": 0.2575
+    },
+    {
+      "predictor": "last_value",
+      "parameter": "leak",
+      "units": "uA",
+      "mae": 0.25885600000000003,
+      "normalised_mae": 1.005266019417476,
+      "rmse": 2.3772248806819545,
+      "median_ae": 0.050000000000000044,
+      "r2": 0.16647588147053183,
+      "n": 30000,
+      "lot_iqr": 0.2575
+    },
+    {
+      "predictor": "linear_extrapolation",
+      "parameter": "leak",
+      "units": "uA",
+      "mae": 0.4351213333333333,
+      "normalised_mae": 1.689791585760518,
+      "rmse": 1.4083869118013466,
+      "median_ae": 0.28000000000000025,
+      "r2": 0.7074355199051705,
+      "n": 30000,
+      "lot_iqr": 0.2575
+    },
+    {
+      "predictor": "lot_median_trajectory",
+      "parameter": "leak",
+      "units": "uA",
+      "mae": 0.26945823561172205,
+      "normalised_mae": 1.0464397499484352,
+      "rmse": 2.3661921201985416,
+      "median_ae": 0.061354991823413085,
+      "r2": 0.17419474091102927,
+      "n": 30000,
+      "lot_iqr": 0.2575
+    },
+    {
+      "predictor": "random_forest",
+      "parameter": "tpd",
+      "units": "ns",
+      "mae": 0.13767294133891564,
+      "normalised_mae": 0.27472774525101623,
+      "rmse": 0.6464504039512443,
+      "median_ae": 0.09696627382352974,
+      "r2": 0.784637857108059,
+      "n": 30000,
+      "lot_iqr": 0.50113
+    },
+    {
+      "predictor": "last_value",
+      "parameter": "tpd",
+      "units": "ns",
+      "mae": 0.24072286666666673,
+      "normalised_mae": 0.48036491228070144,
+      "rmse": 1.0204388326270877,
+      "median_ae": 0.14400000000000013,
+      "r2": 0.46337253547302504,
+      "n": 30000,
+      "lot_iqr": 0.50113
+    },
+    {
+      "predictor": "linear_extrapolation",
+      "parameter": "tpd",
+      "units": "ns",
+      "mae": 0.8334964666666667,
+      "normalised_mae": 1.6632506194395926,
+      "rmse": 1.1363786759409618,
+      "median_ae": 0.684000000000001,
+      "r2": 0.3345045465727987,
+      "n": 30000,
+      "lot_iqr": 0.50113
+    },
+    {
+      "predictor": "lot_median_trajectory",
+      "parameter": "tpd",
+      "units": "ns",
+      "mae": 0.2544301237360544,
+      "normalised_mae": 0.5077178822370749,
+      "rmse": 1.0125689340137018,
+      "median_ae": 0.15589059372316205,
+      "r2": 0.4716178479075812,
+      "n": 30000,
+      "lot_iqr": 0.50113
+    }
+  ],
+  "interval_coverage": [
+    {
+      "parameter": "iddq",
+      "units": "uA",
+      "coverage": 0.8978666666666667,
+      "mean_width": 3.144598976588148,
+      "median_width": 1.2654065659168774,
+      "below_lower": 0.0472,
+      "above_upper": 0.054933333333333334,
+      "n": 30000
+    },
+    {
+      "parameter": "leak",
+      "units": "uA",
+      "coverage": 0.8974,
+      "mean_width": 0.596339716980837,
+      "median_width": 0.19568161222627112,
+      "below_lower": 0.0532,
+      "above_upper": 0.0494,
+      "n": 30000
+    },
+    {
+      "parameter": "tpd",
+      "units": "ns",
+      "coverage": 0.895,
+      "mean_width": 0.670008433872448,
+      "median_width": 0.45092172722434753,
+      "below_lower": 0.047,
+      "above_upper": 0.058,
+      "n": 30000
+    }
+  ],
+  "subgroup_recall": [
+    {
+      "population": "healthy",
+      "n": 26292,
+      "n_defective": 0,
+      "recall": NaN,
+      "false_flag_rate": 0.0277,
+      "escape_rate": NaN
+    },
+    {
+      "population": "benign_high_baseline",
+      "n": 2898,
+      "n_defective": 0,
+      "recall": NaN,
+      "false_flag_rate": 0.1325,
+      "escape_rate": NaN
+    },
+    {
+      "population": "defect_standard",
+      "n": 558,
+      "n_defective": 558,
+      "recall": 0.9839,
+      "false_flag_rate": NaN,
+      "escape_rate": 0.0161
+    },
+    {
+      "population": "defect_low_start_fast_drift",
+      "n": 252,
+      "n_defective": 252,
+      "recall": 0.9722,
+      "false_flag_rate": NaN,
+      "escape_rate": 0.0278
+    }
+  ],
+  "explainability_audit": {
+    "records": 400,
+    "complete_records": 400,
+    "coverage": 1.0,
+    "lot_arithmetic_reproduces": 1.0,
+    "responsible_parameter_named": 1.0,
+    "shap_consistent_with_trajectory": 0.9825,
+    "passes": true
+  },
+  "lot_integrity_test": {
+    "contaminated_lots_in_test": [
+      "LOT-0059",
+      "LOT-0162",
+      "LOT-0252",
+      "LOT-0286"
+    ],
+    "alarmed_lots": [
+      "LOT-0059",
+      "LOT-0162",
+      "LOT-0252",
+      "LOT-0286"
+    ],
+    "mad_triggered": [],
+    "tail_triggered": [
+      "LOT-0059",
+      "LOT-0162",
+      "LOT-0252",
+      "LOT-0286"
+    ],
+    "true_positive": 4,
+    "false_positive": 0,
+    "false_negative": 0
+  },
+  "latency": {
+    "chamber_hours_per_part_full_soak": 168.0,
+    "chamber_hours_saved_per_early_reject": 144.0,
+    "early_decision_point_h": 24.0
+  },
+  "n_test": 30000,
+  "n_test_defective": 810,
+  "elapsed_s": 180.44
+}

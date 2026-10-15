@@ -1,4 +1,4 @@
-# Section 9 — Results
+# Section 9: Results
 
 > Every figure below is produced by a held-out run on the formulation in
 > the technical approach. Module B uses `Value_0h` and `Value_24h` only,
@@ -68,8 +68,8 @@ would be misleading, so the difficulty controls are reported separately.
 
 | Population | n | defective | Recall | Escape rate |
 |---|---|---|---|---|
-| `healthy` | 26,292 | — | — | flag rate 2.77 % |
-| `benign_high_baseline` | 2,898 | — | — | flag rate 13.25 % |
+| `healthy` | 26,292 | - | - | flag rate 2.77 % |
+| `benign_high_baseline` | 2,898 | - | - | flag rate 13.25 % |
 | `defect_standard` | 558 | 558 | 98.39 % | 1.61 % |
 | `defect_low_start_fast_drift` | 252 | 252 | 97.22 % | 2.78 % |
 
@@ -142,7 +142,7 @@ For comparison the static screen alone, on the same held-out lots, escapes 67.13
 realistic contamination levels, and the run above shows it firing on
 0 lot(s). MAD has a 50 % breakdown point, so a lot that is 15–20 %
 defective inflates its MAD by only 1.1–1.5× while clean lots already reach
-1.18× at their 99th percentile — there is no separating factor. The very
+1.18× at their 99th percentile; there is no separating factor. The very
 robustness that makes MAD the right denominator for a lot-relative z-score
 makes it blind as a contamination detector. A tail-inflation index,
 `(Q90 − median) / (1.4826 × MAD)` on relative total drift, separates cleanly:

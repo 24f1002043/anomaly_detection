@@ -70,7 +70,7 @@ def build() -> str:
     L: list[str] = []
     A = L.append
 
-    A("# Section 9 — Results")
+    A("# Section 9: Results")
     A("")
     A("> Every figure below is produced by a held-out run on the formulation in")
     A("> the technical approach. Module B uses `Value_0h` and `Value_24h` only,")
@@ -194,8 +194,8 @@ def build() -> str:
                          f"{int(r['n_defective']):,}", pct(r["recall"]),
                          pct(r["escape_rate"])])
         else:
-            rows.append([f"`{r['population']}`", f"{int(r['n']):,}", "—",
-                         "—", f"flag rate {pct(r.get('false_flag_rate', 0))}"])
+            rows.append([f"`{r['population']}`", f"{int(r['n']):,}", "-",
+                         "-", f"flag rate {pct(r.get('false_flag_rate', 0))}"])
     A(md_table(rows, ["Population", "n", "defective", "Recall", "Escape rate"]))
     A("")
 
@@ -218,8 +218,8 @@ def build() -> str:
                 cells.append(f"{float(sel['mae'].iloc[0]):.4f}")
                 nmaes.append(float(sel["normalised_mae"].iloc[0]))
             else:
-                cells.append("—")
-        cells.append(f"{sum(nmaes)/len(nmaes):.3f}" if nmaes else "—")
+                cells.append("-")
+        cells.append(f"{sum(nmaes)/len(nmaes):.3f}" if nmaes else "-")
         rows.append(cells)
     A(md_table(rows, ["Predictor"] + [f"MAE, {pn} ({units[pn]})" for pn in params]
                + ["Normalised MAE (mean)"]))
@@ -314,7 +314,7 @@ def build() -> str:
     f_mad = len(li["mad_triggered"])
     A(f"{f_mad} lot(s). MAD has a 50 % breakdown point, so a lot that is 15–20 %")
     A("defective inflates its MAD by only 1.1–1.5× while clean lots already reach")
-    A("1.18× at their 99th percentile — there is no separating factor. The very")
+    A("1.18× at their 99th percentile; there is no separating factor. The very")
     A("robustness that makes MAD the right denominator for a lot-relative z-score")
     A("makes it blind as a contamination detector. A tail-inflation index,")
     A("`(Q90 − median) / (1.4826 × MAD)` on relative total drift, separates cleanly:")
@@ -419,7 +419,7 @@ def readme_summary() -> str:
          f"static screen alone: {pct(acc['static_limit_escape_rate'])}"],
         ["Recall / F₂ / PR-AUC",
          f"{pct(final['recall'])} / {final['f_beta']:.3f} / {final['pr_auc']:.3f}",
-         "PR-AUC, not ROC-AUC — prevalence is "
+         "PR-AUC, not ROC-AUC; prevalence is "
          f"{pct(acc['prevalence'])}"],
         ["Yield loss at that operating point",
          f"{pct(final['false_reject_rate'])}",

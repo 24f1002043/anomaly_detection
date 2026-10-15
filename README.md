@@ -28,11 +28,11 @@ part still be safe at 168 h?
 ## Results
 
 See **[docs/RESULTS.md](docs/RESULTS.md)** for the complete held-out numbers,
-generated directly from `artifacts/results/` — no figure in that document is
+generated directly from `artifacts/results/`, no figure in that document is
 typed by hand.
 
 A presentation deck built from the same run is at
-[docs/deck.html](docs/deck.html) — open it in a browser; arrow keys move between
+[docs/deck.html](docs/deck.html), open it in a browser; arrow keys move between
 slides.
 
 Headline, on held-out lots:
@@ -41,7 +41,7 @@ Headline, on held-out lots:
 |  | Held-out result | Context |
 |---|---|---|
 | Escape rate (headline) | **1.98 %** | static screen alone: 67.13 % |
-| Recall / F₂ / PR-AUC | 98.02 % / 0.771 / 0.971 | PR-AUC, not ROC-AUC — prevalence is 2.46 % |
+| Recall / F₂ / PR-AUC | 98.02 % / 0.771 / 0.971 | PR-AUC, not ROC-AUC: prevalence is 2.46 % |
 | Yield loss at that operating point | 3.81 % | 1,112 healthy parts flagged; WATCH counts as flagged |
 | Module B accuracy | 1.7–2.4× better than the best baseline | on all three parameters, from 0 h + 24 h only |
 | Early rejection at 24 h | **70,560 chamber-hours freed** | 490 parts × 144 h, at 0.61 % yield loss |
@@ -64,7 +64,7 @@ python scripts/05_build_report.py                   # fills docs/RESULTS.md
 streamlit run app/inspector.py                      # inspector dashboard
 ```
 
-Everything is CPU-only — tree-based models throughout, no accelerator required
+Everything is CPU-only: tree-based models throughout, no accelerator required
 on the rig. One command reproduces every reported number from the seed in
 `config/default.yaml`.
 
@@ -78,7 +78,7 @@ pytest
 
 No public dataset reproduces parametric burn-in telemetry with hidden 168 h
 terminal values and defect labels. NASA SMAP/MSL, NASA IMS and CWRU were
-reviewed and set aside — see [docs/EXTERNAL_DATASETS.md](docs/EXTERNAL_DATASETS.md),
+reviewed and set aside; see [docs/EXTERNAL_DATASETS.md](docs/EXTERNAL_DATASETS.md),
 which checks the SMAP/MSL label index against its own schema rather than
 describing it from memory.
 
@@ -167,7 +167,7 @@ tests/                       the specification, expressed as tests
 artifacts/figures/           seven figures, regenerated from the run
 ```
 
-### Module A — dynamic lot-relative outlier detection
+### Module A: dynamic lot-relative outlier detection
 
 Four checkpoints per part per parameter is a short, unevenly spaced series, and
 the features are built for that reality: level, interval delta, interval rate,
@@ -190,13 +190,13 @@ undefined or noise-dominated. Carrying them into a burn-in design is a sign the
 feature set was copied from a different sensing problem.
 
 Two detectors run in parallel and are combined under a **maximum-severity
-union, not an intersection** — under an asymmetric cost where a miss is
+union, not an intersection**, under an asymmetric cost where a miss is
 catastrophic, requiring both detectors to agree is the wrong operator. Each of
 the three parameters produces its own severity; the component takes the worst,
 and the flag records which parameter drove it. A component is never averaged
 into a pass.
 
-### Module B — the 0 h + 24 h drift predictor
+### Module B: the 0 h + 24 h drift predictor
 
 Inputs are restricted to the 0 h and 24 h checkpoints **by an explicit allowlist
 enforced in code**, not by convention (`src/burnin/schema.py`). The strongest
@@ -222,7 +222,7 @@ EARLY-REJECT if  V_168_hat(upper, 90%) > L_max - M   or   S_pred > S_safe
 
 This makes the uncertainty itself a reason to reject: a part the model cannot
 confidently clear is not cleared. Note that `V_0` cancels in the margin, giving
-the identity `margin = (L_max − M − V_168_hat) / 168` — an inspector can verify
+the identity `margin = (L_max − M − V_168_hat) / 168`; an inspector can verify
 any quoted margin with a calculator.
 
 The interval is **locally adaptive**, not a constant-width band. A fixed band is
@@ -232,7 +232,7 @@ what the model does not understand never widens for the parts it understands
 least. Conformity scores are therefore normalised by the spread of the forest's
 own trees, so the interval grows where the ensemble disagrees with itself.
 Measured on held-out lots: coverage holds at nominal, while interval width
-spans a ~450× range and tracks the actual error — narrow for easy parts, wide
+spans a ~450× range and tracks the actual error, narrow for easy parts, wide
 for the ones the training lots did not cover.
 
 ### Decision layer
@@ -256,7 +256,7 @@ complete record, generated automatically, with no free-text narration: the
 responsible parameter, the lot-relative arithmetic, TreeSHAP contributions for
 the Module B prediction, ranked robust deviations for Module A, the raw
 four-point trajectory against the lot band, and the numeric margin.
-**Coverage is binary and must be total** — a flag without a complete record is a
+**Coverage is binary and must be total**, a flag without a complete record is a
 defect in the system, and `coverage_audit()` fails the run if so.
 
 ### Evaluation
@@ -288,7 +288,7 @@ static limit -> lot-relative z-rule alone -> Isolation Forest alone
 ```
 
 The ladder is there to be believed when it is unflattering, and on this run it
-is. The first rung carries the argument — the static screen escapes most
+is. The first rung carries the argument, the static screen escapes most
 defects and every dynamic rung takes that to single digits. Beyond it, **the
 maximum-severity union does not beat its own best component**: the two detectors
 largely agree here, so the union inherits the z-rule's false positives without

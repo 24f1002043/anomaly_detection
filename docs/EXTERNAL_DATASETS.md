@@ -1,4 +1,4 @@
-# Appendix A — External datasets
+# Appendix A: External datasets
 
 No public dataset reproduces parametric burn-in telemetry with hidden 168 h
 terminal values and defect labels. The datasets below were reviewed and are
@@ -28,8 +28,8 @@ characterisation above directly from the data:
 | Distinct channel IDs | 81 |
 | Spacecraft | MSL, SMAP |
 | Labelled anomaly sequences | **105** |
-| — of type `point` | 62 |
-| — of type `contextual` | 43 |
+| - of type `point` | 62 |
+| - of type `contextual` | 43 |
 | Total telemetry values | 517,764 |
 | Columns | `chan_id`, `spacecraft`, `anomaly_sequences`, `class`, `num_values` |
 

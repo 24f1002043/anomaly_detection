@@ -105,7 +105,7 @@ cfg, te, dec = S["cfg"], S["te"], S["dec"]
 res, integrity, thr = S["res"], S["integrity"], S["thresholds"]
 
 # --------------------------------------------------------------------- header
-st.title("Component Burn-In Screening — Inspector Queue")
+st.title("Component Burn-In Screening: Inspector Queue")
 st.caption(
     "SIH26170 · AI-Driven Anomaly Detection in Component Burn-In & Screening · "
     f"held-out lots only ({te['lot_id'].nunique()} lots, {len(te):,} components)"
@@ -132,7 +132,7 @@ c[5].metric(
 alarmed = sorted(integrity.alarmed_lots)
 if alarmed:
     st.error(
-        f"**Lot integrity alarm — {len(alarmed)} lot(s) under engineering review.** "
+        f"**Lot integrity alarm: {len(alarmed)} lot(s) under engineering review.** "
         "A whole suspect lot is a more important finding than a single suspect part. "
         "Lot-relative statistics for these lots have been replaced by a pooled "
         "cross-lot baseline."
@@ -239,7 +239,7 @@ rec = S["explainer"].build(
 left, right = st.columns([3, 2])
 
 with left:
-    st.markdown(f"#### Trajectory — {p.label} ({p.units})")
+    st.markdown(f"#### Trajectory: {p.label} ({p.units})")
     tj = rec.trajectory
     fig = go.Figure()
     fig.add_trace(go.Scatter(
@@ -301,11 +301,11 @@ with right:
 st.markdown("#### Why this part was flagged")
 ca, cb = st.columns(2)
 with ca:
-    st.markdown("**Module A** — ranked robust deviations against the lot (median/MAD units)")
+    st.markdown("**Module A**: ranked robust deviations against the lot (median/MAD units)")
     st.dataframe(pd.DataFrame(rec.module_a_deviations), hide_index=True,
                  use_container_width=True)
 with cb:
-    st.markdown("**Module B** — TreeSHAP contributions to the predicted Value_168h")
+    st.markdown("**Module B**: TreeSHAP contributions to the predicted Value_168h")
     sh = pd.DataFrame(rec.shap_contributions)
     if len(sh):
         sh["shap"] = sh["shap"].round(5)
@@ -317,6 +317,6 @@ with st.expander("Complete explanation record (JSON, as exported for audit)"):
 
 st.caption(
     "Every flag carries this record, generated automatically, with no free-text "
-    "narration. Coverage is binary and must be total — a flag without a complete "
+    "narration. Coverage is binary and must be total, a flag without a complete "
     "record is a defect in the system (Section 8.3)."
 )

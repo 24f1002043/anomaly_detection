@@ -421,7 +421,7 @@
           A datasheet maximum answers <em>is this reading legal?</em> It cannot answer
           <em>is this part behaving unlike its own lot?</em> On our held-out run,
           <strong>67.1&nbsp;% of defective parts finish the soak below every datasheet
-          maximum</strong> — no static threshold, however tuned, can catch them.
+          maximum</strong>, no static threshold, however tuned, can catch them.
         </p>
         <p>
           The physics is why burn-in works at all. Under an Arrhenius acceleration
@@ -452,7 +452,7 @@ n = 1.2 defective <span class="cm">super-linear, accelerating runaway</span></pr
       <img src="../artifacts/figures/01_trajectories_by_population.png" alt="Median trajectories for four part populations across the four burn-in checkpoints, for standby current, leakage current and propagation delay. Latent defects rise steeply but mostly stay below the datasheet limit line.">
       <figcaption>
         Latent defects (red) climb steeply yet finish under the limit. Benign
-        high-baseline parts (blue) sit high and flat — a trap for any rule that flags
+        high-baseline parts (blue) sit high and flat, a trap for any rule that flags
         on level. Low-start fast-drift defects (orange) begin <em>below</em> the healthy
         median and only separate late. The shaded band is all Module B ever sees.
       </figcaption>
@@ -467,13 +467,13 @@ n = 1.2 defective <span class="cm">super-linear, accelerating runaway</span></pr
     <p>
       No public dataset has parametric burn-in telemetry with hidden 168&nbsp;h terminal
       values and defect labels. NASA SMAP/MSL, NASA IMS and CWRU were reviewed and set
-      aside — we downloaded the SMAP/MSL label index and checked it against its own
+      aside; we downloaded the SMAP/MSL label index and checked it against its own
       schema rather than describing it from memory. It has 82 channel segments and 105
       labelled anomaly sequences, but no part, lot or wafer identity and no terminal
       parametric value, so neither module can be scored on it.
     </p>
     <p>
-      So the data is generated — which means <strong>the generator is the thing under
+      So the data is generated, which means <strong>the generator is the thing under
       scrutiny, not the model</strong>. A generator that makes defects obvious proves
       nothing, because a model can only find what was deliberately embedded. We
       therefore gate it <em>before any model is fitted</em>:
@@ -535,7 +535,7 @@ n = 1.2 defective <span class="cm">super-linear, accelerating runaway</span></pr
           &divide; ( 1.4826 &times; MAD_lot(V&#8348;) )</pre>
         <p>
           Two detectors run in parallel and combine under a <strong>maximum-severity
-          union, not an intersection</strong> — under a 20:1 cost where a miss is
+          union, not an intersection</strong>, under a 20:1 cost where a miss is
           catastrophic, requiring both detectors to agree is the wrong operator. Each
           parameter produces its own severity; the component takes the worst, and the
           flag records which parameter drove it. A component is never averaged into a pass.
@@ -549,7 +549,7 @@ n = 1.2 defective <span class="cm">super-linear, accelerating runaway</span></pr
         </p>
         <p>
           A textbook 3.5&thinsp;&sigma; would have cost a <strong>10.1&nbsp;% false-reject
-          rate</strong> — the WATCH state fires on a single-parameter exceedance, so an
+          rate</strong>, the WATCH state fires on a single-parameter exceedance, so an
           uncalibrated value floods the inspector queue with healthy parts.
         </p>
         <div class="note hard">
@@ -565,7 +565,7 @@ n = 1.2 defective <span class="cm">super-linear, accelerating runaway</span></pr
     <figure>
       <img src="../artifacts/figures/02_lot_relative_separation.png" alt="Left: standby current at 168 hours plotted per lot, showing lot means differ so one global threshold is the wrong instrument. Right: histogram of robust z of total drift within lot, where healthy and defective parts separate cleanly.">
       <figcaption>
-        Left: absolute value — lot means differ, so a single global threshold is the
+        Left: absolute value; lot means differ, so a single global threshold is the
         wrong instrument. Right: the same parts, once the lot is the reference.
       </figcaption>
     </figure>
@@ -617,7 +617,7 @@ margin = S_safe &minus; S_pred
 EARLY-REJECT if  V&#770;&#8321;&#8326;&#8328;(upper, 90 %) &gt; L_max &minus; M   or   S_pred &gt; S_safe</pre>
     <div class="note hard">
       <strong>V&#8320; cancels in the margin.</strong> That leaves the identity
-      <span class="m">margin = (L_max &minus; M &minus; V&#770;&#8321;&#8326;&#8328;) / 168</span> — an inspector can verify any
+      <span class="m">margin = (L_max &minus; M &minus; V&#770;&#8321;&#8326;&#8328;) / 168</span>; an inspector can verify any
       quoted margin with three numbers and a calculator.
     </div>
     <p>
@@ -656,7 +656,7 @@ EARLY-REJECT if  V&#770;&#8321;&#8326;&#8328;(upper, 90 %) &gt; L_max &minus; M 
         <p>
           The first rung is the whole argument: the static screen escapes most defects,
           and every dynamic rung takes that to single digits. Beyond it the rungs are
-          close — each is calibrated separately against the same escape target, so they
+          close; each is calibrated separately against the same escape target, so they
           land at similar escape rates by construction and the honest comparison is on
           <em>what that escape rate costs</em>.
         </p>
@@ -667,8 +667,8 @@ EARLY-REJECT if  V&#770;&#8321;&#8326;&#8328;(upper, 90 %) &gt; L_max &minus; M 
           The maximum-severity union does <em>not</em> beat its own best component here.
           The two detectors largely agree on this generator, so the union inherits the
           z-rule's false positives without adding recall. We keep it for the
-          asymmetric-cost argument — a union cannot be defeated by a failure mode only
-          one detector sees — but that robustness is an <em>argument</em>, not something
+          asymmetric-cost argument, a union cannot be defeated by a failure mode only
+          one detector sees, but that robustness is an <em>argument</em>, not something
           this run demonstrates, and we do not claim it as one.
         </div>
       </div>
@@ -678,7 +678,7 @@ EARLY-REJECT if  V&#770;&#8321;&#8326;&#8328;(upper, 90 %) &gt; L_max &minus; M 
       Module B early rejection likewise does not improve <em>terminal</em> detection: the
       parts it rejects at 24&nbsp;h are largely parts Module A catches at 168&nbsp;h
       anyway. Its value is chamber time, and it costs yield. That is precisely why the
-      early and terminal paths are kept separate — collapsing them destroys the value of
+      early and terminal paths are kept separate, collapsing them destroys the value of
       early rejection.
     </p>
 
@@ -766,7 +766,7 @@ contaminated lots   8 &ndash; 60</pre>
         </div>
         <p>
           <strong>WATCH counts as flagged, never as pass.</strong> An intermediate state
-          that quietly absorbed defective parts would manufacture false negatives — the
+          that quietly absorbed defective parts would manufacture false negatives, the
           exact error a 20:1 cost punishes hardest. It costs yield, and we report it.
         </p>
       </div>
@@ -775,7 +775,7 @@ contaminated lots   8 &ndash; 60</pre>
     <figure>
       <img src="../artifacts/figures/07_example_flag.png" alt="A single flagged component: its four-point trajectory against the lot band with the Module B prediction and interval marked at 168 hours, the TreeSHAP contributions that drove the prediction, and the full text record including lot arithmetic and margin to the safety slope.">
       <figcaption>
-        One flagged part, end to end — the trajectory against its lot band, the
+        One flagged part, end to end, the trajectory against its lot band, the
         contributions behind the prediction, and the record an inspector signs off.
       </figcaption>
     </figure>
@@ -829,7 +829,7 @@ streamlit run app/inspector.py</pre>
 
     <p>In the dashboard, in order:</p>
     <ul class="clean">
-      <li><strong>Lot integrity alarms at the top of the queue</strong> — a whole suspect lot is a bigger finding than a single suspect part.</li>
+      <li><strong>Lot integrity alarms at the top of the queue</strong>, a whole suspect lot is a bigger finding than a single suspect part.</li>
       <li>Filter to <span class="m">REJECT</span>, sort by severity, open the top part.</li>
       <li>On the trajectory, point at the shaded 0–24&nbsp;h window: that is all Module B ever saw; the diamond at 168&nbsp;h is what it predicted.</li>
       <li>Read the lot arithmetic aloud and check it on a calculator.</li>
@@ -844,7 +844,7 @@ streamlit run app/inspector.py</pre>
           <tr><td class="lab">"Synthetic data, so the results are meaningless."</td><td>The generator is gated: static limits catch only 32.9 % of defects, so the models solve a problem the incumbent method demonstrably cannot. The gate is a test, not a paragraph.</td></tr>
           <tr><td class="lab">"How do I know Module B isn't peeking at 96 h?"</td><td>Run the discipline test. It corrupts the late checkpoints and asserts bit-identical predictions. The allowlist fails closed.</td></tr>
           <tr><td class="lab">"Isolation Forest is a black box."</td><td>Inspectors act on the z-rule, which is arithmetic. The forest contributes severity; the record shows ranked deviations in median/MAD units. We deliberately do not fake an additive SHAP decomposition for an unsupervised score.</td></tr>
-          <tr><td class="lab">"What is your hardest case?"</td><td>Low-start fast-drift defects — depressed at 0 h, mildly elevated at 24 h. We recall 97.2 % of them, and they cap early rejection. We built that population to have an honest answer.</td></tr>
+          <tr><td class="lab">"What is your hardest case?"</td><td>Low-start fast-drift defects, depressed at 0 h, mildly elevated at 24 h. We recall 97.2 % of them, and they cap early rejection. We built that population to have an honest answer.</td></tr>
         </tbody>
       </table>
     </div>

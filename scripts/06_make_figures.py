@@ -164,7 +164,7 @@ def fig_ladder() -> None:
     ax1.set_ylabel("escape rate  (FN / positives)")
     ax1.yaxis.set_major_formatter(PercentFormatter(1.0))
     ax1.set_ylim(0, max(lad["escape_rate"]) * 1.22)
-    ax1.set_title("Escape rate — lower is better (headline metric)", fontsize=10.5)
+    ax1.set_title("Escape rate, lower is better (headline metric)", fontsize=10.5)
 
     ax2.plot(x, lad["yield_loss"], "-o", color=ACCENT, lw=2, ms=6,
              label="yield loss (false rejects)")
